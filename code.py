@@ -37,6 +37,33 @@ def astar(grid, start, goal):
 
 
 
+# Visualization
+def visualize(grid, path, start, goal):
+    img = np.array(grid)
+    img = np.where(img == 1, 100, 255)
+
+    fig, ax = plt.subplots()
+    ax.imshow(img, cmap='gray')
+
+    if path:
+        px, py = zip(*path)
+        ax.plot(py, px, color='blue', linewidth=2, label="Path")
+
+    ax.scatter(start[1], start[0], c='green', s=100, label='Start', marker='o')
+    ax.scatter(goal[1], goal[0], c='red', s=100, label='Goal', marker='X')
+
+    ax.set_xticks(np.arange(-0.5, len(grid[0]), 1))
+    ax.set_yticks(np.arange(-0.5, len(grid), 1))
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.grid(True, color='black', linewidth=0.5)
+    ax.legend(loc='upper right')
+    plt.title("A* Pathfinding - Room Layout")
+    plt.show()
+
+
+
+
 # Room Definitions
 grid_room1 = [
     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
@@ -111,6 +138,10 @@ try:
     else:
         print("❌ No path found.")
 
+    
+    visualize(grid, path, start, goal)
+
 
 except Exception as e:
     print("Error:",e)
+
