@@ -1,5 +1,6 @@
 import heapq
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 import numpy as np
 
 
@@ -45,10 +46,6 @@ def visualize(grid, path, start, goal):
     fig, ax = plt.subplots()
     ax.imshow(img, cmap='gray')
 
-    if path:
-        px, py = zip(*path)
-        ax.plot(py, px, color='blue', linewidth=2, label="Path")
-
     ax.scatter(start[1], start[0], c='green', s=100, label='Start', marker='o')
     ax.scatter(goal[1], goal[0], c='red', s=100, label='Goal', marker='X')
 
@@ -57,8 +54,20 @@ def visualize(grid, path, start, goal):
     ax.set_xticklabels([])
     ax.set_yticklabels([])
     ax.grid(True, color='black', linewidth=0.5)
-    ax.legend(loc='upper right')
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
     plt.title("A* Pathfinding - Room Layout")
+
+    path_line, = ax.plot([], [], color='blue', linewidth=2, label='Path')
+
+    def update(i):
+        px, py = zip(*path[:i+1])
+        path_line.set_data(py, px)
+        return path_line,
+
+    ani = animation.FuncAnimation(
+        fig, update, frames=len(path), interval=200, blit=True, repeat=False
+    )
+
     plt.show()
 
 
