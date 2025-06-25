@@ -5,6 +5,8 @@ import numpy as np
 
 def heuristic(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+
 # A* algorithm
 def astar(grid, start, goal):
     rows, cols = len(grid), len(grid[0])
@@ -32,3 +34,83 @@ def astar(grid, start, goal):
                         path + [neighbor]
                     ))
     return None
+
+
+
+# Room Definitions
+grid_room1 = [
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+    [1, 1, 0, 1, 1, 0, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+    [0, 1, 1, 1, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+    [0, 1, 0, 1, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+]
+
+grid_room2 = [
+    [0, 0, 1, 0, 0, 0],
+    [0, 1, 1, 1, 1, 0],
+    [0, 1, 0, 0, 1, 0],
+    [0, 1, 0, 1, 1, 0],
+    [0, 0, 0, 1, 0, 0],
+    [1, 1, 0, 0, 0, 0],
+]
+
+grid_room3 = [
+    [0, 0, 0, 1, 0, 0, 0],
+    [1, 1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 0, 0, 1, 0],
+    [0, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+]
+
+# Room selection
+room_options = {
+    "1": grid_room1,
+    "2": grid_room2,
+    "3": grid_room3
+}
+
+print("\nChoose a room layout:")
+print("1. Room 1 (10x10)")
+print("2. Room 2 (6x6)")
+print("3. Room 3 (5x7)")
+room_choice = input("Enter room number (1/2/3): ")
+
+grid = room_options.get(room_choice)
+if not grid:
+    print("Invalid choice. Exiting.")
+    exit()
+
+rows, cols = len(grid), len(grid[0])
+print(f"Grid size: {rows} rows x {cols} cols")
+
+# Get start and goal from user
+try:
+    start_x = int(input("Enter START X (0-based row): "))
+    start_y = int(input("Enter START Y (0-based col): "))
+    goal_x = int(input("Enter GOAL X (0-based row): "))
+    goal_y = int(input("Enter GOAL Y (0-based col): "))
+
+    start = (start_x, start_y)
+    goal = (goal_x, goal_y)
+
+    if grid[start_x][start_y] == 1 or grid[goal_x][goal_y] == 1:
+        print("Start or goal is on a wall. Exiting.")
+        exit()
+
+    path = astar(grid, start, goal)
+
+    if path:
+        print("✅ Path found:")
+        print(path)
+    else:
+        print("❌ No path found.")
+
+
+except Exception as e:
+    print("Error:",e)
